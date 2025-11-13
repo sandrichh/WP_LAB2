@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${isEdit} ? 'Edit current book' : 'Add new book'"></title>
+</head>
+<body>
+<h2 th:text="${isEdit} ? 'Edit current book' : 'Add new book'"></h2>
+<form method="post" th:action="${isEdit} ? '/books/edit/'+${kniga.getId()} : '/books/add'">
+    <label>Name:</label>
+    <input type="text" name="title" th:value="${isEdit} ? ${kniga.getTitle()} : ''" required><br/>
+    <label>Genre:</label>
+    <input type="text" name="genre" th:value="${isEdit} ? ${kniga.getGenre()} : ''" required><br/>
+    <label>Average Rating:</label>
+    <input type="text" name="averageRating" th:value="${isEdit} ? ${kniga.getAverageRating()} : ''" required><br/>
+    <label>Author: </label>
+    <select name="authorId">
+        <option th:each="a : ${avtori}"
+                th:value="${a.getId()}"
+                th:text="${a.getName() + ' ' + a.getSurname()}"
+                th:selected="${isEdit} ? ${kniga.getAuthor() != null and a.getId() == kniga.getId()}">
+        </option>
+    </select>
+    <button type="submit">Submit changes</button>
+</form>
+</body>
+</html>

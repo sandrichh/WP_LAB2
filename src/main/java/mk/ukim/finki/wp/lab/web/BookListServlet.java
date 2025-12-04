@@ -45,11 +45,11 @@ public class BookListServlet extends HttpServlet {
             System.out.println(e.getMessage());
         }
 
-        if(filterName != null && !filterName.isEmpty() && filterRating != -1) {
-            books = bookService.searchBooks(filterName, filterRating);
-        } else {
-            books = bookService.listAll();
-        }
+//        if(filterName != null && !filterName.isEmpty() && filterRating != -1) {
+//            books = bookService.searchBooks(filterName, filterRating);
+//        } else {
+//            books = bookService.listAll();
+//        }
 
         WebContext context = new WebContext(webExchange);
         context.setVariable("books", books);

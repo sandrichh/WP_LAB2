@@ -1,7 +1,6 @@
 package mk.ukim.finki.wp.lab.web.controller;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.wp.lab.model.Author;
 import mk.ukim.finki.wp.lab.model.Book;
 import mk.ukim.finki.wp.lab.service.AuthorService;
@@ -24,21 +23,60 @@ public class BookController {
         this.authorService = authorService;
     }
 
+//    @GetMapping
+//    public String getBooksPage(@RequestParam(required = false) String error,
+//                               Model model,
+//                               @RequestParam(required = false) String filterName,
+//                               @RequestParam(required = false) Double filterRating){
+//
+//        List<Book> books;
+//
+//        if (filterName != null && filterRating != null && !filterName.isEmpty() && filterRating != 0){
+//            books = bookService.listAll().stream().filter(t->t.getTitle().contains(filterName) && t.getAverageRating()>= filterRating).toList();
+//            model.addAttribute("books", books);
+//        }
+//        else{
+//            model.addAttribute("books", bookService.listAll());
+//        }
+//
+//        return "listBooks";
+//    }
+
     @GetMapping
-    public String getBooksPage(@RequestParam(required = false) String error, Model model, @RequestParam(required = false) String filterName, @RequestParam(required = false) Double filterRating){
-        if (filterName != null && filterRating != null && !filterName.isEmpty() && filterRating != 0){
-            List<Book> filtrirani = bookService.listAll().stream().filter(t->t.getTitle().contains(filterName) && t.getAverageRating()>= filterRating).toList();
-            model.addAttribute("books", filtrirani);
+    public String getBooksPage(@RequestParam(required = false) Long authorId,
+                               @RequestParam(required = false) String filterName,
+                               @RequestParam(required = false) Double filterRating,
+                               Model model) {
+
+        List<Book> books;
+
+        if (authorId != null) {
+            books = bookService.findAllByAuthor(authorId);
         }
-        else{
-            model.addAttribute("books", bookService.listAll());
+        else if (filterName != null && filterRating != null &&
+                !filterName.isEmpty() && filterRating != 0) {
+
+            books = bookService.listAll().stream()
+                    .filter(b -> b.getTitle().contains(filterName)
+                            && b.getAverageRating() >= filterRating)
+                    .toList();
         }
+        else {
+            books = bookService.listAll();
+        }
+
+        model.addAttribute("books", books);
+        model.addAttribute("avtori", authorService.findAll());
+        model.addAttribute("selectedAuthorId", authorId);
 
         return "listBooks";
     }
 
+
+
     @PostMapping
-    public String filterBooks(@RequestParam String filterName, @RequestParam Double filterRating){
+    public String filterBooks(@RequestParam String filterName,
+                              @RequestParam Double filterRating){
         return "redirect:/books?filterName="+filterName+"&filterRating="+filterRating;
     }
 
@@ -46,7 +84,7 @@ public class BookController {
     public String editBook(@PathVariable Long id,
                            Model model){
 
-        Book kniga = bookService.findBookById(id);
+        Book kniga = bookService.findById(id);
         model.addAttribute("kniga",kniga);
         model.addAttribute("isEdit",true);
         model.addAttribute("avtori",authorService.findAll());
@@ -60,7 +98,7 @@ public class BookController {
                            @RequestParam String genre,
                            @RequestParam Double averageRating,
                            @RequestParam Long authorId){
-        bookService.editBook(id,title,genre,averageRating,authorId);
+        bookService.update(id,title,genre,averageRating,authorId);
         return "redirect:/books";
     }
 
@@ -77,14 +115,16 @@ public class BookController {
                            @RequestParam String genre,
                            @RequestParam Double averageRating,
                            @RequestParam Long authorId){
-        Author a = authorService.findAll().stream().filter(p->p.getId().equals(authorId)).findFirst().orElse(null);
-        bookService.listAll().add(new Book(title,genre,averageRating,a));
+//        Author a = authorService.findAll().stream().filter(p->p.getId().equals(authorId)).findFirst().orElse(null);
+//        bookService.listAll().add(new Book(title,genre,averageRating,a));
+        bookService.create(title, genre, averageRating, authorId);
         return "redirect:/books";
     }
 
     @GetMapping("/delete/{bookId}")
     public String deleteBook(@PathVariable Long bookId){
-        bookService.listAll().removeIf(k->k.getId()==bookId);
+//        bookService.listAll().removeIf(k->k.getId()==bookId);
+        bookService.delete(bookId);
         return "redirect:/books";
     }
 

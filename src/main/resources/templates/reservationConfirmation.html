@@ -44,11 +44,11 @@
         </tr>
         <tr>
             <td><b>Reader Name</b></td>
-            <td th:text="${readerName}"></td>
+            <td th:text="${reservation.readerName}"></td>
         </tr>
         <tr>
             <td><b>ClientAddress</b></td>
-            <td th:text="${readerAddress}"><!-- Display IP address from servlet --></td>
+            <td th:text="${reservation.readerAddress}"><!-- Display IP address from servlet --></td>
         </tr>
         <tr>
             <td><b>Client IP Address</b></td>
@@ -56,11 +56,11 @@
         </tr>
         <tr>
             <td><b>Reservation for Book</b></td>
-            <td th:text="${bookTitle}"><!-- Display book title from servlet --></td>
+            <td th:text="${book.title}"><!-- Display book title from servlet --></td>
         </tr>
         <tr>
             <td><b>Number of copies</b></td>
-            <td th:text="${numCopies}"><!-- Display number of copies from servlet --></td>
+            <td th:text="${reservation.numberOfCopies}"><!-- Display number of copies from servlet --></td>
         </tr>
     </table>
 </section>

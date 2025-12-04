@@ -1,8 +1,88 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <meta charset="utf-8">-->
+<!--    <title>Book Reservation - Welcome and choose a Book</title>-->
+<!--    <style type="text/css">-->
+<!--        body {-->
+<!--            width: 800px;-->
+<!--            margin: auto;-->
+<!--            font-family: Arial, sans-serif;-->
+<!--        }-->
+<!--        h1 {-->
+<!--            color: #333;-->
+<!--        }-->
+<!--        form {-->
+<!--            margin-top: 20px;-->
+<!--        }-->
+<!--        .book-option {-->
+<!--            margin: 10px 0;-->
+<!--            padding: 10px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            border-radius: 5px;-->
+<!--        }-->
+<!--        .book-option:hover {-->
+<!--            background-color: #f5f5f5;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<header>-->
+<!--    <h1>Welcome to our Book Reservation App</h1>-->
+<!--</header>-->
+<!--<main>-->
+<!--    &lt;!&ndash;    <h2>Recently viewed:</h2>&ndash;&gt;-->
+<!--    &lt;!&ndash;    <ul>&ndash;&gt;-->
+<!--    &lt;!&ndash;        <li th:each="lastViewedBook : ${lastViewedBooks}" th:text="${lastViewedBook}"></li>&ndash;&gt;-->
+<!--    &lt;!&ndash;    </ul>&ndash;&gt;-->
+<!--    <form action="/books" method="POST">-->
+<!--        <h2>Filter books:</h2>-->
+
+<!--        <label>Name:</label>-->
+<!--        <input type="text" name="filterName" required/>-->
+<!--        <br />-->
+
+<!--        <label>Minimum rating:</label>-->
+<!--        <input type="number" name="filterRating" step=".01" min="0" value="0" required />-->
+<!--        <br />-->
+
+<!--        <button type="submit">Filter</button>-->
+<!--    </form>-->
+<!--    <form action="/bookReservation" method="POST">-->
+<!--        <h2>Choose a book:</h2>-->
+
+<!--        <div th:each="book : ${books}">-->
+<!--            <input type="radio" class="book-option" name="bookTitle" th:value="${book.getTitle()}"-->
+<!--                   th:text="'Title: ' + ${book.getTitle()} + ', Genre: ' + ${book.getGenre()} + ', Rating: ' + ${book.getAverageRating()} + ', Author: '+${book.getAuthor().getName()}+' '+${book.getAuthor().getSurname()}" />-->
+<!--            <a th:href="'/books/edit/'+${book.getId()}"> Edit </a>-->
+<!--            <a th:href="'/books/delete/'+${book.getId()}"> Delete </a>-->
+
+<!--        </div>-->
+
+<!--        <div>-->
+<!--            <a href="/books/add"> Add book </a>-->
+<!--        </div>-->
+
+<!--        <h2>Enter your information:</h2>-->
+<!--        <label>Your Name:</label>-->
+<!--        <input type="text" name="readerName" required><br/>-->
+<!--        <label>Your Address:</label>-->
+<!--        <input type="text" name="readerAddress" required><br/>-->
+
+<!--        <h2>Choose number of copies:</h2>-->
+<!--        <input type="number" name="numCopies" min="1" max="10" required><br/>-->
+<!--        <br/>-->
+<!--        <input type="submit" value="Reserve Book">-->
+<!--    </form>-->
+<!--</main>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>Book Reservation - Welcome and choose a Book</title>
+    <title>Book Reservation - Choose a Book</title>
     <style type="text/css">
         body {
             width: 800px;
@@ -11,9 +91,6 @@
         }
         h1 {
             color: #333;
-        }
-        form {
-            margin-top: 20px;
         }
         .book-option {
             margin: 10px 0;
@@ -24,56 +101,114 @@
         .book-option:hover {
             background-color: #f5f5f5;
         }
+        .book-row {
+            margin-bottom: 12px;
+        }
+
+        .book-entry {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
     </style>
 </head>
 <body>
-<header>
-    <h1>Welcome to our Book Reservation App</h1>
-</header>
+
+<h1>Welcome to our Book Reservation App</h1>
+
 <main>
-    <!--    <h2>Recently viewed:</h2>-->
-    <!--    <ul>-->
-    <!--        <li th:each="lastViewedBook : ${lastViewedBooks}" th:text="${lastViewedBook}"></li>-->
-    <!--    </ul>-->
+
+    <form action="/books" method="get">
+        <h2>Filter by Author:</h2>
+
+        <select name="authorId">
+            <option value="">All authors</option>
+
+            <option th:each="a : ${avtori}"
+                    th:value="${a.id}"
+                    th:text="${a.name + ' ' + a.surname}">
+            </option>
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <hr/>
+
     <form action="/books" method="POST">
         <h2>Filter books:</h2>
 
         <label>Name:</label>
-        <input type="text" name="filterName" required/>
-        <br />
+        <input type="text" name="filterName"/>
+        <br/>
 
         <label>Minimum rating:</label>
-        <input type="number" name="filterRating" step=".01" min="0" value="0" required />
-        <br />
+        <input type="number" name="filterRating" step=".01" min="0" value="0"/>
+        <br/>
 
         <button type="submit">Filter</button>
     </form>
+
+    <hr/>
+
+
     <form action="/bookReservation" method="POST">
         <h2>Choose a book:</h2>
 
-        <div th:each="book : ${books}">
-            <input type="radio" class="book-option" name="bookTitle" th:value="${book.getTitle()}"
-                   th:text="'Title: ' + ${book.getTitle()} + ', Genre: ' + ${book.getGenre()} + ', Rating: ' + ${book.getAverageRating()} + ', Author: '+${book.getAuthor().getName()}+' '+${book.getAuthor().getSurname()}" />
-            <a th:href="'/books/edit/'+${book.getId()}"> Edit </a>
-            <a th:href="'/books/delete/'+${book.getId()}"> Delete </a>
+<!--        <div th:each="book : ${books}">-->
+<!--            <label class="book-option">-->
+<!--                <input type="radio" name="bookId" th:value="${book.id}"/>-->
 
+<!--                <span>-->
+<!--                    <b th:text="${book.title}"></b>-->
+<!--                    — <span th:text="${book.genre}"></span>-->
+<!--                    — Rating: <span th:text="${book.averageRating}"></span>-->
+<!--                    — Author: <span th:text="${book.author.name + ' ' + book.author.surname}"></span>-->
+<!--                </span>-->
+<!--            </label>-->
+<!--            -->
+<!--            <a th:href="@{'/books/edit/' + ${book.id}}">Edit</a>-->
+<!--            <a th:href="@{'/books/delete/' + ${book.id}}">Delete</a>-->
+<!--        </div>-->
+
+        <div th:each="book : ${books}" class="book-row">
+            <div class="book-entry">
+                <input type="radio" name="bookId" th:value="${book.id}"/>
+
+                <span>
+            <b th:text="${book.title}"></b>
+            — <span th:text="${book.genre}"></span>
+            — Rating: <span th:text="${book.averageRating}"></span>
+            — Author: <span th:text="${book.author.name + ' ' + book.author.surname}"></span>
+        </span>
+
+                <a th:href="@{'/books/edit/' + ${book.id}}" style="margin-left: 10px;">Edit</a>
+                <a th:href="@{'/books/delete/' + ${book.id}}" style="margin-left: 10px;">Delete</a>
+            </div>
         </div>
+
 
         <div>
-            <a href="/books/add"> Add book </a>
+            <a href="/books/add">Add book</a>
         </div>
 
+        <hr/>
+
         <h2>Enter your information:</h2>
+
         <label>Your Name:</label>
-        <input type="text" name="readerName" required><br/>
+        <input type="text" name="readerName" required/><br/>
+
         <label>Your Address:</label>
-        <input type="text" name="readerAddress" required><br/>
+        <input type="text" name="readerAddress" required/><br/>
 
         <h2>Choose number of copies:</h2>
-        <input type="number" name="numCopies" min="1" max="10" required><br/>
-        <br/>
-        <input type="submit" value="Reserve Book">
+        <input type="number" name="numCopies" min="1" max="10" required/><br/><br/>
+
+        <input type="submit" value="Reserve Book"/>
     </form>
+
 </main>
 </body>
 </html>

@@ -20,4 +20,9 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
+
+    @Override
+    public Author findById(Long id) {
+        return authorRepository.findById(id).orElse(null);
+    }
 }

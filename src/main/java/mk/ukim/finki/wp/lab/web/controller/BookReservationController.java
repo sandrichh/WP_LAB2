@@ -37,9 +37,11 @@ public class BookReservationController {
         BookReservation reservation =
                 reservationService.placeReservation(book.getTitle(), readerName, readerAddress, numCopies);
 
-        model.addAttribute("reservation", reservation);
-        model.addAttribute("book", book);
+        model.addAttribute("readerName", readerName);
         model.addAttribute("ipAddress", ip);
+        model.addAttribute("readerAddress",readerAddress);
+        model.addAttribute("title",book.getTitle());
+        model.addAttribute("numCopies",numCopies);
 
         return "reservationConfirmation";
     }

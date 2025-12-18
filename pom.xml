@@ -54,6 +54,7 @@
         </dependency>
 
 
+
 <!--        novi - za lab3 -->
 
         <dependency>
@@ -73,6 +74,25 @@
             <version>42.7.3</version>
 <!--            <scope>runtime</scope>-->
         </dependency>
+
+
+<!--        novi za lab 4-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 
 
     </dependencies>
